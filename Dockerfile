@@ -12,15 +12,14 @@ RUN apt-get update && apt-get install -y \
 # Create app directory
 WORKDIR /app
 
-# Copy dependency files first for better caching
-COPY pyproject.toml uv.lock ./
-
-# Install uv and dependencies
+# Install uv first
 RUN pip install uv
-RUN uv pip install --system -e .
 
 # Copy the entire application
 COPY . .
+
+# Install dependencies
+RUN uv pip install --system -e .
 
 # Create a non-root user
 RUN useradd --create-home --shell /bin/bash app \
