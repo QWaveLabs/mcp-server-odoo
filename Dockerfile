@@ -30,4 +30,5 @@ USER app
 EXPOSE 8000
 
 # Command to run the application with HTTP transport using Railway's PORT env var
-CMD ["sh", "-c", "python -m mcp_server_odoo --transport streamable-http --host 0.0.0.0 --port ${PORT:-8000}"]
+# Add some debugging and error handling
+CMD ["sh", "-c", "echo 'Starting Odoo MCP Server...' && echo 'Environment:' && env | grep ODOO && python -m mcp_server_odoo --transport streamable-http --host 0.0.0.0 --port ${PORT:-8000} || (echo 'Server failed to start, checking connection...' && python -c 'import xmlrpc.client; c=xmlrpc.client.ServerProxy(\"$ODOO_URL/xmlrpc/2/common\"); print(\"Server version:\", c.version()); uid=c.authenticate(\"$ODOO_DB\", \"$ODOO_USER\", \"$ODOO_PASSWORD\", {}); print(\"Auth result:\", uid)' && exit 1)"]
