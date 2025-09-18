@@ -1,0 +1,24 @@
+[build]
+builder = "dockerfile"
+
+[deploy]
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
+
+[[deploy.environmentVariables]]
+name = "ODOO_MCP_TRANSPORT"
+value = "streamable-http"
+
+[[deploy.environmentVariables]]
+name = "ODOO_MCP_HOST"
+value = "0.0.0.0"
+
+[[deploy.environmentVariables]]
+name = "ODOO_MCP_PORT"
+value = "$PORT"
+
+[[deploy.environmentVariables]]
+name = "PYTHONUNBUFFERED"
+value = "1"
